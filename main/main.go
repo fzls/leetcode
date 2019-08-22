@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Println(FindMedianSortedArrays([]int{4, 5}, []int{}))
+	fmt.Println(ManachersAlgorithm("bb"))
 }
