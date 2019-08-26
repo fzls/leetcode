@@ -1,11 +1,9 @@
 package leetcode
 
-import "fmt"
-
-func Run() {
-	fmt.Println(convert("A", 1))
-	//"LCIRETOESIIGEDHN"
-}
+//func Run() {
+//	fmt.Println(convert("A", 1))
+//	//"LCIRETOESIIGEDHN"
+//}
 
 func convert(s string, numRows int) string {
 	if numRows == 1 {
