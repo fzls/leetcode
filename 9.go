@@ -8,28 +8,20 @@ func isPalindrome(x int) bool {
 		return true
 	}
 
-	n := 0
+	var arr []int
 	for _x := x; _x > 0; _x /= 10 {
-		n++
+		arr = append(arr, _x%10)
 	}
 
-	// 10^(n-1)
-	leftRatio := 1
-	for i := 0; i < n-1; i++ {
-		leftRatio *= 10
-	}
-	// 1
-	rightRatio := 1
-
-	for i := 1; 2*i <= n; i++ {
-		left := x / leftRatio % 10
-		right := x / rightRatio % 10
-		if left != right {
+	i:=0
+	j:=len(arr)-1
+	for i<j {
+		if arr[i] != arr[j]{
 			return false
 		}
 
-		leftRatio /= 10
-		rightRatio *= 10
+		i++
+		j--
 	}
 
 	return true
