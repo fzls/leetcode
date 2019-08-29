@@ -1,8 +1,8 @@
 package leetcode
 
-func Run(){
-	reverse(-1463847412)
-}
+//func Run(){
+//	reverse(-1463847412)
+//}
 
 const (
 	INT32_MIN = -(1<<31)
