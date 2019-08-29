@@ -20,6 +20,10 @@ func Test_removeElement(t *testing.T) {
 			nums []int
 			val  int
 		}{nums: []int{0,1,2,2,3,0,4,2}, val: 2}, want: 5},
+		{name: "test", args: struct {
+			nums []int
+			val  int
+		}{nums: []int{4,5}, val: 5}, want: 1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

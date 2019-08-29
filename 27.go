@@ -14,15 +14,16 @@ func removeElement(nums []int, val int) int {
 	//	}
 	//}
 
-	i := len(nums) - 1
-	for j := 0; j <= i; j++ {
-		for i >= 0 && j <= i && nums[j] == val {
-			// 将等于val的值依次放到最后
-			nums[j] = nums[i]
-			nums[i] = val
-			i--
+	i := 0
+	n := len(nums)
+	for i < n {
+		if nums[i] == val {
+			nums[i] = nums[n-1]
+			n--
+		} else {
+			i++
 		}
 	}
 
-	return i + 1
+	return i
 }
