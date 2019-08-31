@@ -1,5 +1,7 @@
 package leetcode
 
+import "math"
+
 /**
  * Definition for a binary tree node.
  * type TreeNode struct {
@@ -8,7 +10,6 @@ package leetcode
  *     Right *TreeNode
  * }
  */
-var cachedHeight = make(map[*TreeNode]int)
 
 func isBalanced(root *TreeNode) bool {
 	if root == nil {
@@ -30,24 +31,5 @@ func getHeight(root *TreeNode) int {
 		return 0
 	}
 
-	leftHeight := 0
-	if height, ok := cachedHeight[root.Left]; ok {
-		leftHeight = height
-	} else {
-		leftHeight = getHeight(root.Left)
-		cachedHeight[root.Left] = leftHeight
-	}
-	rightHeight := 0
-	if height, ok := cachedHeight[root.Right]; ok {
-		rightHeight = height
-	} else {
-		rightHeight = getHeight(root.Right)
-		cachedHeight[root.Right] = rightHeight
-	}
-
-	if leftHeight >= rightHeight {
-		return 1 + leftHeight
-	} else {
-		return 1 + rightHeight
-	}
+	return 1 + int(math.Max(float64(getHeight(root.Left)), float64(getHeight(root.Right))))
 }
