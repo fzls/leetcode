@@ -8,13 +8,15 @@ func climbStairs(n int) int {
 		return 2
 	}
 
-	stairs := make([]int, n)
-	stairs[0] = 1
-	stairs[1] = 2
+	before2 := 1
+	before1 := 2
+	current := 0
 
 	for i := 2; i < n; i++ {
-		stairs[i] = stairs[i-1] + stairs[i-2]
+		current = before1 + before2
+		before2 = before1
+		before1 = current
 	}
 
-	return stairs[n-1]
+	return current
 }
