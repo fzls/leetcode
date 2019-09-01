@@ -1,21 +1,32 @@
 package leetcode
 
 func getRow(rowIndex int) []int {
-	var res [][]int
+	if rowIndex == 0 {
+		return []int{1}
+	}
+	if rowIndex == 1 {
+		return []int{1, 1}
+	}
 
-	for i := 0; i <= rowIndex; i++ {
-		row := make([]int, i+1)
+	lastRow := make([]int, rowIndex+1)
+	// row 1
+	lastRow[0] = 1
+	lastRow[1] = 1
+	currentRow := make([]int, rowIndex+1)
 
-		row[0] = 1
-		row[i] = 1
+	for i := 2; i <= rowIndex; i++ {
+		currentRow[0] = 1
+		currentRow[i] = 1
 
 		for j := 1; j < i; j++ {
 			// j>=1, i>=2
-			row[j] = res[i-1][j-1] + res[i-1][j]
+			currentRow[j] = lastRow[j-1] + lastRow[j]
 		}
 
-		res = append(res, row)
+		for j := 0; j <= i; j++ {
+			lastRow[j] = currentRow[j]
+		}
 	}
 
-	return res[rowIndex]
+	return currentRow
 }
