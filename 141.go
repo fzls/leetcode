@@ -12,15 +12,25 @@ func hasCycle(head *ListNode) bool {
 		return false
 	}
 
-	// 最直观的算法：使用hashmap记录出现过的节点，若重复，则说明有环
-	nodeSet := make(map[*ListNode]struct{})
-	for head != nil {
-		if _, exists := nodeSet[head]; exists {
+	// 使用双指针法
+	p1 := head      // step 1
+	p2 := head.Next // step 2
+	for p2 != nil {
+		// 每一轮p2会比p1多走一格，所以若有环，则必定相遇
+		if p2 == p1 {
 			return true
 		}
 
-		nodeSet[head] = struct{}{}
-		head = head.Next
+		// p1 走一步
+		p1 = p1.Next
+
+		// p2走两步
+		p2 = p2.Next
+		// 边缘检查
+		if p2 == nil {
+			return false
+		}
+		p2 = p2.Next
 	}
 
 	return false
