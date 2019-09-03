@@ -8,18 +8,28 @@ package leetcode
  * }
  */
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
-	cache := make(map[*ListNode]struct{})
-	for headA != nil {
-		cache[headA] = struct{}{}
-		headA = headA.Next
-	}
+	pa := headA
+	movea := false
+	pb := headB
+	moveb := false
 
-	for headB != nil {
-		if _, exists := cache[headB]; exists {
-			return headB
+	for pa != nil && pb != nil && pa != pb {
+		pa = pa.Next
+		pb = pb.Next
+
+		if pa == nil && !movea {
+			pa = headB
+			movea = true
 		}
-		headB = headB.Next
+		if pb == nil && !moveb {
+			pb = headA
+			moveb = true
+		}
 	}
 
-	return nil
+	if pa == nil || pb == nil {
+		return nil
+	}
+
+	return pa
 }
