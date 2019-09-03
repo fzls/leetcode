@@ -8,20 +8,17 @@ package leetcode
  * }
  */
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
-	if headA == nil || headB == nil {
-		return nil
+	cache := make(map[*ListNode]struct{})
+	for headA != nil {
+		cache[headA] = struct{}{}
+		headA = headA.Next
 	}
 
-	for headA != nil {
-		// 判断A是否在B后面
-		for p := headB; p != nil; p = p.Next {
-			if p == headA {
-				return headA
-			}
+	for headB != nil {
+		if _, exists := cache[headB]; exists {
+			return headB
 		}
-
-		// A前进一格
-		headA = headA.Next
+		headB = headB.Next
 	}
 
 	return nil
