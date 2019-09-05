@@ -14,18 +14,15 @@ func countPrimes(n int) int {
 	cnt := 0
 
 	//使用素数筛
-	isPrimes := make([]int, n) // 1~n-1
-	isPrimes[1] = NOT_PRIME
+	isNotPrime := make([]bool, n) // 1~n-1
 	for i := 2; i < n; i++ {
-		if isPrimes[i] == NOT_SURE {
-			isPrimes[i] = IS_PRIME
-			cnt++
+		if isNotPrime[i] {
+			continue
 		}
+		cnt++
 
 		for j := 2 * i; j < n; j += i {
-			if isPrimes[j] == NOT_SURE {
-				isPrimes[j] = NOT_PRIME
-			}
+			isNotPrime[j] = true
 		}
 	}
 
