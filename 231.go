@@ -6,6 +6,10 @@ func isPowerOfTwo(n int) bool {
 	for n != 0 {
 		cntOfOne++
 		n = n & (n - 1)
+
+		if cntOfOne > 1 {
+			return false
+		}
 	}
 	return cntOfOne == 1
 }
