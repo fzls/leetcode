@@ -7,18 +7,22 @@ func _swap(nums []int, i, j int) {
 }
 
 func moveZeroes(nums []int) {
-	// 使用冒泡法，将所有不是0的都往前移
-	for i := 0; i < len(nums); i++ {
-		if nums[i] == 0 {
-			continue
+	zeroIdx := 0
+	nonZeroIdx := 0
+	for nonZeroIdx < len(nums) {
+		for zeroIdx < len(nums) && nums[zeroIdx] != 0 {
+			zeroIdx++
 		}
-
-		for j := i - 1; j >= 0; j-- {
-			if nums[j] != 0 {
-				break
-			}
-			_swap(nums, j, j+1)
+		if nonZeroIdx < zeroIdx {
+			nonZeroIdx = zeroIdx + 1
+		} else {
+			nonZeroIdx++
+		}
+		for nonZeroIdx < len(nums) && nums[nonZeroIdx] == 0 {
+			nonZeroIdx++
+		}
+		if nonZeroIdx < len(nums) {
+			_swap(nums, zeroIdx, nonZeroIdx)
 		}
 	}
-
 }
