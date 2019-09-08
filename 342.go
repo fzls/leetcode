@@ -5,8 +5,8 @@ func isPowerOfFour(num int) bool {
 		return false
 	}
 
-	for num%4 == 0 {
-		num /= 4
+	for num&3 == 0 {
+		num >>= 2
 	}
 
 	return num == 1
