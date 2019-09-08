@@ -1,10 +1,6 @@
 package leetcode
 
 func isPowerOfFour(num int) bool {
-	if num <= 0 {
-		return false
-	}
-
 	return num == 1 ||
 		num == 1<<2 ||
 		num == 1<<4 ||
