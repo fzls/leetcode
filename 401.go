@@ -22,6 +22,10 @@ func _getPerms(sum int, max int, factor int, remainingOnes int, remainingDigits 
 	if remainingOnes > remainingDigits {
 		return
 	}
+	// 假设后面紧接着都是1，若这种情况大于max，则可以提前剪枝
+	if sum+factor*(pow2(remainingOnes)-1) > max {
+		return
+	}
 
 	if remainingOnes == 0 {
 		*res = append(*res, sum)
@@ -38,14 +42,8 @@ func _getPerms(sum int, max int, factor int, remainingOnes int, remainingDigits 
 // remainingOnes: 剩下的位中，还剩多少个1
 // remainingDigits: 剩下的位数
 func getPerms(max int, remainingOnes int, remainingDigits int) []int {
-	if remainingDigits == 0 {
-		return []int{0}
-	}
-
 	var res []int
-	// 首位是0
 	_getPerms(0, max, 1, remainingOnes, remainingDigits, &res)
-
 	return res
 }
 
