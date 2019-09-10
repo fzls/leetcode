@@ -15,33 +15,36 @@ func pow2(n int) int {
 	}
 }
 
-func _getPerms(sum int, max int, lastDigit int, remainNumberOfDigit int, res *[]int) {
+func _getPerms(sum int, max int, factor int, remainingOnes int, remainingDigits int, res *[]int) {
 	if sum > max {
 		return
 	}
+	if remainingOnes > remainingDigits {
+		return
+	}
 
-	if remainNumberOfDigit == 0 {
+	if remainingOnes == 0 {
 		*res = append(*res, sum)
 		return
 	}
 
-	// 这一位1至少是上一位左移一位
-	t := (pow2(remainNumberOfDigit) - 1)
-	for thisDigit := lastDigit * 2; t*thisDigit <= max; thisDigit *= 2 {
-		_getPerms(sum+thisDigit, max, thisDigit, remainNumberOfDigit-1, res)
-	}
+	// 这一位取1
+	_getPerms(sum+factor, max, factor*2, remainingOnes-1, remainingDigits-1, res)
+	// 这一位取0
+	_getPerms(sum, max, factor*2, remainingOnes, remainingDigits-1, res)
 }
 
-func getPerms(max int, remainNumberOfDigit int) []int {
-	if remainNumberOfDigit == 0 {
+// max: 和的最大值
+// remainingOnes: 剩下的位中，还剩多少个1
+// remainingDigits: 剩下的位数
+func getPerms(max int, remainingOnes int, remainingDigits int) []int {
+	if remainingDigits == 0 {
 		return []int{0}
 	}
 
 	var res []int
-	// 首位是1
-	_getPerms(1, max, 1, remainNumberOfDigit-1, &res)
 	// 首位是0
-	_getPerms(0, max, 1, remainNumberOfDigit, &res)
+	_getPerms(0, max, 1, remainingOnes, remainingDigits, &res)
 
 	return res
 }
@@ -60,8 +63,8 @@ func readBinaryWatch(num int) []string {
 		}
 
 		// now hour has nHour led on(1), min has nMin led on(1)
-		hours := getPerms(11, nHour)
-		mins := getPerms(59, nMin)
+		hours := getPerms(11, nHour, 4)
+		mins := getPerms(59, nMin, 6)
 
 		for _, hour := range hours {
 			for _, min := range mins {
