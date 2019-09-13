@@ -5,6 +5,14 @@ import (
 	"testing"
 )
 
+func listIntToSet(nums []int) map[int]struct{} {
+	set := make(map[int]struct{}, len(nums))
+	for _, num := range nums {
+		set[num] = struct{}{}
+	}
+	return set
+}
+
 func Test_intersection(t *testing.T) {
 	type args struct {
 		nums1 []int
@@ -26,7 +34,7 @@ func Test_intersection(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := intersection(tt.args.nums1, tt.args.nums2); !reflect.DeepEqual(got, tt.want) {
+			if got := intersection(tt.args.nums1, tt.args.nums2); !reflect.DeepEqual(listIntToSet(got), listIntToSet(tt.want)) {
 				t.Errorf("intersection() = %v, want %v", got, tt.want)
 			}
 		})
