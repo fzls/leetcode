@@ -9,16 +9,8 @@ func isMatch(s string, p string) bool {
 
 	// 判断有*通配符的情况
 	if len(p) >= 2 && p[1] == '*' {
-		for i := 0; i <= len(s); i++ {
-			// 依次匹配0至剩余最大个数个p[0]
-			if i != 0 && !(p[0] == s[i-1] || p[0] == '.') {
-				break
-			}
-			// 如果子项也匹配，则返回true
-			if isMatch(s[i:], p[2:]) {
-				return true
-			}
-		}
+		return isMatch(s, p[2:]) ||
+			(p[0] == s[0] || p[0] == '.') && isMatch(s[1:], p)
 	}
 
 	// 没有通配符的情况下，如果此时两者有一个为空，则说明不匹配
