@@ -8,8 +8,6 @@ var cache = make(map[__key]bool)
 
 // 2019/09/14 17:26 by fzls
 func isMatch(s string, p string) (res bool) {
-	return isMatchWithStateMachine(s, p)
-
 	// 对重复计算进行缓存
 	if matched, ok := cache[__key{s, p}]; ok {
 		return matched
