@@ -86,11 +86,6 @@ func genStates(now *State, str string, idx int) int {
 		nowState = state
 	}
 
-	ret := genStates(nowState, str, idx+1)
-	if ret == 0 {
-		now.End = true
-	}
-
 	// 构建回环
 	addParent := now // 从当前传入的节点开始
 	for addParent.Parent != nil && addParent.Size == 0 {
@@ -98,6 +93,12 @@ func genStates(now *State, str string, idx int) int {
 		addParent.Parent.Append(nowState.Val, nowState)
 		// 依次向上迭代
 		addParent = addParent.Parent
+	}
+
+	// 生成后续状态转移
+	ret := genStates(nowState, str, idx+1)
+	if ret == 0 {
+		now.End = true
 	}
 
 	return now.Size + ret
