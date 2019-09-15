@@ -10,7 +10,7 @@ func isMatch(s string, p string) bool {
 	// 判断有*通配符的情况
 	if len(p) >= 2 && p[1] == '*' {
 		return isMatch(s, p[2:]) ||
-			(p[0] == s[0] || p[0] == '.') && isMatch(s[1:], p)
+			len(s) > 0 && (p[0] == s[0] || p[0] == '.') && isMatch(s[1:], p)
 	}
 
 	// 没有通配符的情况下，如果此时两者有一个为空，则说明不匹配

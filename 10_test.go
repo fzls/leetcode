@@ -36,6 +36,10 @@ func Test_isMatch(t *testing.T) {
 			s string
 			p string
 		}{s: "a", p: "ab"}, want: false},
+		{name: "test", args: struct {
+			s string
+			p string
+		}{s: "ab", p: ".*c"}, want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
