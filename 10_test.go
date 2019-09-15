@@ -40,6 +40,10 @@ func Test_isMatch(t *testing.T) {
 			s string
 			p string
 		}{s: "ab", p: ".*c"}, want: false},
+		{name: "test", args: struct {
+			s string
+			p string
+		}{s: "aaa", p: "ab*ac*a"}, want: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
