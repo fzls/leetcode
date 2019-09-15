@@ -1,7 +1,21 @@
 package leetcode
 
+type __key struct {
+	s, p string
+}
+
+var cache = make(map[__key]bool)
+
 // 2019/09/14 17:26 by fzls
-func isMatch(s string, p string) bool {
+func isMatch(s string, p string) (res bool) {
+	if matched, ok := cache[__key{s, p}]; ok {
+		return matched
+	}
+
+	defer func() {
+		cache[__key{s, p}] = res
+	}()
+
 	// 如果匹配上了，则直接返回true
 	if len(s) == 0 && len(p) == 0 {
 		return true
