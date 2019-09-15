@@ -8,6 +8,7 @@ var cache = make(map[__key]bool)
 
 // 2019/09/14 17:26 by fzls
 func isMatch(s string, p string) (res bool) {
+	// 对重复计算进行缓存
 	if matched, ok := cache[__key{s, p}]; ok {
 		return matched
 	}
@@ -16,26 +17,20 @@ func isMatch(s string, p string) (res bool) {
 		cache[__key{s, p}] = res
 	}()
 
-	// 如果匹配上了，则直接返回true
-	if len(s) == 0 && len(p) == 0 {
-		return true
+	// 如果pattern已全部消耗，则只需判断字符串是否也已消耗完
+	if len(p) == 0 {
+		return len(s) == 0
 	}
 
-	// 判断有*通配符的情况
+	// 判断第一个字符是否匹配
+	firstMatch := len(s) > 0 && (p[0] == s[0] || p[0] == '.')
+
 	if len(p) >= 2 && p[1] == '*' {
-		return isMatch(s, p[2:]) ||
-			len(s) > 0 && (p[0] == s[0] || p[0] == '.') && isMatch(s[1:], p)
-	}
-
-	// 没有通配符的情况下，如果此时两者有一个为空，则说明不匹配
-	if len(s) == 0 || len(p) == 0 {
-		return false
-	}
-
-	// 否则看首字符是否匹配
-	if p[0] == s[0] || p[0] == '.' {
-		return isMatch(s[1:], p[1:])
+		// 判断有*通配符的情况
+		return isMatch(s, p[2:]) || // 不匹配*
+			(firstMatch && isMatch(s[1:], p)) // 消耗掉一个源字符串的字符
 	} else {
-		return false
+		// 无通配符
+		return firstMatch && isMatch(s[1:], p[1:])
 	}
 }
