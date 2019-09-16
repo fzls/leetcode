@@ -13,11 +13,13 @@ func threeSum(nums []int) [][]int {
 	if len(sortedNums) < 3 {
 		return nil
 	}
+	if sortedNums[len(sortedNums)-1] < 0 {
+		return nil
+	}
 
 	resSet := make(map[threeSumKey]struct{})
 
-	for i := 0; i < len(sortedNums); i++ {
-
+	for i := 0; i < len(sortedNums) && sortedNums[i] <= 0; i++ {
 		j := i + 1
 		k := len(sortedNums) - 1
 		for j < k {
@@ -40,25 +42,13 @@ func threeSum(nums []int) [][]int {
 		resList = append(resList, []int{res.n1, res.n2, res.n3})
 	}
 	sort.Slice(resList, func(i, j int) bool {
-		if resList[i][0] < resList[j][0] {
-			return true
-		} else if resList[i][0] > resList[j][0] {
-			return false
-		} else {
-			if resList[i][1] < resList[j][1] {
-				return true
-			} else if resList[i][1] > resList[j][1] {
-				return false
-			} else {
-				if resList[i][2] < resList[j][2] {
-					return true
-				} else if resList[i][2] > resList[j][2] {
-					return false
-				} else {
-					return false
-				}
-			}
+		if resList[i][0] != resList[j][0] {
+			return resList[i][0] < resList[j][0]
 		}
+		if resList[i][1] != resList[j][1] {
+			return resList[i][1] < resList[j][1]
+		}
+		return resList[i][2] < resList[j][2]
 	})
 
 	return resList
