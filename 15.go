@@ -8,20 +8,28 @@ type threeSumKey struct {
 
 // 2019/09/17 1:18 by fzls
 func threeSum(nums []int) [][]int {
-	// 预处理一遍数组，保证所有数字最多出现三次
-	nums = preProcess(nums)
+	// 预处理一遍数组，保证所有数字最多出现三次，且数组元素递增
+	sortedNums := preProcess(nums)
+	if len(sortedNums) < 3 {
+		return nil
+	}
 
 	resSet := make(map[threeSumKey]struct{})
 
-	for i := 0; i < len(nums)-2; i++ {
-		// 转化为two sum问题
-		if twoNumbers := _twoSum(nums[i+1:], -nums[i]); len(twoNumbers) != 0 {
-			for _, twoNumber := range twoNumbers {
-				// 排序方便排重
-				ts := append([]int{nums[i]}, twoNumber...)
-				sort.Ints(ts)
+	for i := 0; i < len(sortedNums); i++ {
+
+		j := i + 1
+		k := len(sortedNums) - 1
+		for j < k {
+			sum := sortedNums[i] + sortedNums[j] + sortedNums[k]
+			if sum == 0 {
 				// 使用集合进行排重
-				resSet[threeSumKey{ts[0], ts[1], ts[2]}] = struct{}{}
+				resSet[threeSumKey{sortedNums[i], sortedNums[j], sortedNums[k]}] = struct{}{}
+				k--
+			} else if sum > 0 {
+				k--
+			} else {
+				j++
 			}
 		}
 	}
@@ -31,6 +39,27 @@ func threeSum(nums []int) [][]int {
 	for res := range resSet {
 		resList = append(resList, []int{res.n1, res.n2, res.n3})
 	}
+	sort.Slice(resList, func(i, j int) bool {
+		if resList[i][0] < resList[j][0] {
+			return true
+		} else if resList[i][0] > resList[j][0] {
+			return false
+		} else {
+			if resList[i][1] < resList[j][1] {
+				return true
+			} else if resList[i][1] > resList[j][1] {
+				return false
+			} else {
+				if resList[i][2] < resList[j][2] {
+					return true
+				} else if resList[i][2] > resList[j][2] {
+					return false
+				} else {
+					return false
+				}
+			}
+		}
+	})
 
 	return resList
 }
@@ -45,22 +74,6 @@ func preProcess(nums []int) []int {
 		}
 	}
 
-	return res
-}
-
-// 返回所有值加起来等于target的一对数
-func _twoSum(nums []int, target int) [][]int {
-	var res [][]int
-
-	cache := make(map[int]int) // 值=>此值出现的下标
-
-	for idx, num := range nums {
-		if targetIdx, exists := cache[target-num]; exists {
-			res = append(res, []int{nums[targetIdx], num})
-		}
-
-		cache[num] = idx
-	}
-
+	sort.Ints(res)
 	return res
 }
