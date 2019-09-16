@@ -2,6 +2,7 @@ package leetcode
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -29,7 +30,24 @@ func Test_threeSum(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := threeSum(tt.args.nums); !reflect.DeepEqual(got, tt.want) {
+			got := threeSum(tt.args.nums)
+
+			sortOrder := func(resList [][]int) {
+				// 保证结果排序唯一
+				sort.Slice(resList, func(i, j int) bool {
+					if resList[i][0] != resList[j][0] {
+						return resList[i][0] < resList[j][0]
+					}
+					if resList[i][1] != resList[j][1] {
+						return resList[i][1] < resList[j][1]
+					}
+					return resList[i][2] < resList[j][2]
+				})
+			}
+			sortOrder(got)
+			sortOrder(tt.want)
+
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("threeSum() = %v, want %v", got, tt.want)
 			}
 		})
