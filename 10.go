@@ -8,6 +8,8 @@ var cache = make(map[__key]bool)
 
 // 2019/09/14 17:26 by fzls
 func isMatch(s string, p string) (res bool) {
+	return isMatchWithStateMachine(s, p)
+
 	// 对重复计算进行缓存
 	if matched, ok := cache[__key{s, p}]; ok {
 		return matched
@@ -107,6 +109,10 @@ func genStates(now *State, str string, idx int) int {
 func check(now *State, str string, idx int) bool {
 	if idx >= len(str) {
 		return now.End
+	}
+
+	if now.Size > len(str) {
+		return false
 	}
 
 	// 下一步可走的包括.的子状态和当前字符的子状态
