@@ -15,16 +15,16 @@ var digit2Alphas = []string{
 
 // 2019/09/18 0:21 by fzls
 func letterCombinations(digits string) []string {
-	return _letterCombinations(digits, []string{})
+	if len(digits) == 0 {
+		return nil
+	}
+
+	return _letterCombinations(digits, []string{""})
 }
 
 func _letterCombinations(digits string, preCombinations []string) []string {
 	if len(digits) == 0 {
 		return preCombinations
-	}
-
-	if len(preCombinations) == 0 {
-		preCombinations = append(preCombinations, "")
 	}
 
 	var combinations []string
