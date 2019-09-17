@@ -12,14 +12,18 @@ func Test_threeSumClosest(t *testing.T) {
 		args args
 		want int
 	}{
-		struct {
-			name string
-			args args
-			want int
-		}{name: "test", args: struct {
+		{name: "test", args: struct {
 			nums   []int
 			target int
 		}{nums: []int{-1, 2, 1, -4}, target: 1}, want: 2},
+		{name: "test", args: struct {
+			nums   []int
+			target int
+		}{nums: []int{0, 1, 2}, target: 3}, want: 3},
+		{name: "test", args: struct {
+			nums   []int
+			target int
+		}{nums: []int{1, 1, 1, 1}, target: 0}, want: 3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
