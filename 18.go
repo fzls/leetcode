@@ -1,7 +1,6 @@
 package leetcode
 
 import (
-	"fmt"
 	"sort"
 )
 
@@ -14,7 +13,6 @@ func fourSum(nums []int, target int) [][]int {
 	}
 	// 预处理一遍数组，保证数组元素递增
 	sort.Ints(nums)
-	fmt.Println(nums)
 
 	var resList [][]int
 
@@ -24,14 +22,32 @@ func fourSum(nums []int, target int) [][]int {
 			continue // 避免重复
 		}
 
+		// 剪枝
+		if i+3 < len(nums) && nums[i]+nums[i+1]+nums[i+2]+nums[i+3] > target {
+			break
+		}
+
 		for p := i + 1; p < len(nums); p++ {
 			if p > i+1 && nums[p] == nums[p-1] {
 				continue
 			}
 
+			// 剪枝
+			if p+2 < len(nums) && nums[i]+nums[p]+nums[p+1]+nums[p+2] > target {
+				break
+			}
+
 			j := p + 1
 			k := len(nums) - 1
 			for j < k {
+				// 剪枝
+				if nums[i]+nums[p]+nums[j]+nums[j+1] > target {
+					break
+				}
+				if nums[i]+nums[p]+nums[k-1]+nums[k] < target {
+					break
+				}
+
 				sum := nums[i] + nums[p] + nums[j] + nums[k]
 				if sum == target {
 					// 使用集合进行排重
