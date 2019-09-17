@@ -5,14 +5,6 @@ import (
 	"testing"
 )
 
-func listIntToSet(nums []int) map[int]struct{} {
-	set := make(map[int]struct{}, len(nums))
-	for _, num := range nums {
-		set[num] = struct{}{}
-	}
-	return set
-}
-
 func Test_intersection(t *testing.T) {
 	type args struct {
 		nums1 []int
