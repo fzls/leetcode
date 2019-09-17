@@ -14,8 +14,13 @@ func fourSum(nums []int, target int) [][]int {
 	// 预处理一遍数组，保证数组元素递增
 	sort.Ints(nums)
 
-	var resList [][]int
+	// 预先剪枝
+	n := len(nums)
+	if nums[0]+nums[1]+nums[2]+nums[3] > target || nums[n-1]+nums[n-2]+nums[n-3]+nums[n-4] < target {
+		return nil
+	}
 
+	var resList [][]int
 	// 固定一位，其余的按照two sum的处理
 	for i := 0; i < len(nums); i++ {
 		if i > 0 && nums[i] == nums[i-1] {
