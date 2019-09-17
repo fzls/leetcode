@@ -31,6 +31,9 @@ func fourSum(nums []int, target int) [][]int {
 		if i+3 < len(nums) && nums[i]+nums[i+1]+nums[i+2]+nums[i+3] > target {
 			break
 		}
+		if i+3 < len(nums) && nums[i]+nums[n-1]+nums[n-2]+nums[n-3] < target {
+			continue
+		}
 
 		for p := i + 1; p < len(nums); p++ {
 			if p > i+1 && nums[p] == nums[p-1] {
@@ -40,6 +43,9 @@ func fourSum(nums []int, target int) [][]int {
 			// 剪枝
 			if p+2 < len(nums) && nums[i]+nums[p]+nums[p+1]+nums[p+2] > target {
 				break
+			}
+			if p+2 < len(nums) && nums[i]+nums[p]+nums[n-1]+nums[n-2] < target {
+				continue
 			}
 
 			j := p + 1
