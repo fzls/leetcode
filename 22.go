@@ -38,7 +38,13 @@ func _generateParenthesis(nUnpaired int, nRemaining int, temp []byte, res *[]str
 // 因为第一个位置必定为左括号，我们可以通过枚举其匹配的右括号的所有可能位置，将问题转化为子问题
 // 假设dp(n)是n个左右括号的所有组合，右括号可能在1,3,5,...2*i+1,...2*(n-1)+1 的位置，假设为位置为2*i+1，
 // 则这种情况下所有可能可以表示为 ( + left + ) + right，其中left=dp(i), right = dp(n-i-1)
+var cache_dp_generateParenthesis = make(map[int][]string)
+
 func _dp_generateParenthesis(n int) []string {
+	if c, ok := cache_dp_generateParenthesis[n]; ok {
+		return c
+	}
+
 	if n == 0 {
 		return []string{""}
 	}
@@ -51,5 +57,6 @@ func _dp_generateParenthesis(n int) []string {
 			}
 		}
 	}
+	cache_dp_generateParenthesis[n] = res
 	return res
 }
