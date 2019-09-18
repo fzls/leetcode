@@ -7,6 +7,7 @@ func rotate(nums []int, k int) {
 
 	// 使用之前从陈越姥姥那边学到的环法
 	k = k % len(nums)
+	// 统计遍历了多少个数了
 	cnt := 0
 	for i := 0; i < len(nums) && cnt < len(nums); i++ {
 		buf := nums[i]
