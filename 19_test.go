@@ -18,47 +18,11 @@ func Test_removeNthFromEnd(t *testing.T) {
 		{name: "test", args: struct {
 			head *ListNode
 			n    int
-		}{head: &ListNode{
-			Val: 1,
-			Next: &ListNode{
-				Val: 2,
-				Next: &ListNode{
-					Val: 3,
-					Next: &ListNode{
-						Val: 4,
-						Next: &ListNode{
-							Val:  5,
-							Next: nil,
-						},
-					},
-				},
-			},
-		}, n: 2}, want: &ListNode{
-			Val: 1,
-			Next: &ListNode{
-				Val: 2,
-				Next: &ListNode{
-					Val: 3,
-					Next: &ListNode{
-						Val:  5,
-						Next: nil,
-					},
-				},
-			},
-		}},
+		}{head: genList(1, 2, 3, 4, 5), n: 2}, want: genList(1, 2, 3, 5)},
 		{name: "test", args: struct {
 			head *ListNode
 			n    int
-		}{head: &ListNode{
-			Val: 1,
-			Next: &ListNode{
-				Val:  2,
-				Next: nil,
-			},
-		}, n: 1}, want: &ListNode{
-			Val:  1,
-			Next: nil,
-		}},
+		}{head: genList(1, 2), n: 1}, want: genList(1)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
