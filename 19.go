@@ -27,27 +27,22 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	}
 
 	// 现在问题转化为已知链表的头结点，和其中某一个节点，删除这个节点
-	if lastN == head {
-		// 删除头结点
-		res := head.Next
-		head.Next = nil
-		return res
-	} else {
-		// 删除中间节点
-		if lastN.Next == nil {
-			// 如果是末尾
-			p := head
-			for p.Next != lastN {
-				p = p.Next
-			}
-			p.Next = nil
-		} else {
-			// 如果是中间
-			next := lastN.Next
-			lastN.Val = lastN.Next.Val
-			lastN.Next = lastN.Next.Next
-			next.Next = nil
+	dummyHead := &ListNode{}
+	dummyHead.Next = head
+
+	if lastN.Next == nil {
+		// 如果是末尾
+		p := dummyHead
+		for p.Next != lastN {
+			p = p.Next
 		}
-		return head
+		p.Next = nil
+	} else {
+		// 如果是中间
+		next := lastN.Next
+		lastN.Val = lastN.Next.Val
+		lastN.Next = lastN.Next.Next
+		next.Next = nil
 	}
+	return dummyHead.Next
 }
