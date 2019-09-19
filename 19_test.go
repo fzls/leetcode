@@ -23,6 +23,10 @@ func Test_removeNthFromEnd(t *testing.T) {
 			head *ListNode
 			n    int
 		}{head: genList(1, 2), n: 1}, want: genList(1)},
+		{name: "test", args: struct {
+			head *ListNode
+			n    int
+		}{head: genList(1), n: 1}, want: genList()},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
