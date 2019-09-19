@@ -13,7 +13,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func genList(nums ...int) *ListNode {
+func genLinkedList(nums ...int) *ListNode {
 	if len(nums) == 0 {
 		return nil
 	}
@@ -32,4 +32,12 @@ func genList(nums ...int) *ListNode {
 	p = dummyHead.Next
 	dummyHead.Next = nil
 	return p
+}
+
+func linkedList2List(head *ListNode) (nums []int) {
+	for head != nil {
+		nums = append(nums, head.Val)
+		head = head.Next
+	}
+	return
 }
