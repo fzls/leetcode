@@ -16,9 +16,10 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 	dummy := &ListNode{Next: head}
 
 	pre := dummy
-	start := dummy.Next
+	start := pre.Next
 OUTER_LOOP:
 	for start != nil {
+		// 找到本轮的k个节点区间
 		end := start
 		for i := 1; i < k; i++ {
 			if end == nil {
@@ -33,7 +34,7 @@ OUTER_LOOP:
 
 		// 迭代
 		pre = start
-		start = start.Next
+		start = pre.Next
 	}
 
 	return dummy.Next
