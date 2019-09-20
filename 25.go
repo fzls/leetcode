@@ -17,20 +17,19 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 
 	pre := dummy
 	start := pre.Next
-OUTER_LOOP:
 	for start != nil {
 		// 找到本轮的k个节点区间
 		end := start
-		for i := 1; i < k; i++ {
-			if end == nil {
-				// 剩余节点数不足k个，则不做额外处理
-				break OUTER_LOOP
-			}
+		for i := 1; i < k && end != nil; i++ {
 			end = end.Next
+		}
+		if end == nil {
+			// 剩余节点数不足k个，则不做额外处理
+			break
 		}
 
 		// 从start到end进行翻转
-		__reverse(pre, start, end)
+		__reverse(pre, start, end, end.Next)
 
 		// 迭代
 		pre = start
@@ -41,13 +40,11 @@ OUTER_LOOP:
 }
 
 // 反转列表，使得pre start ... end post ...变为pre end ... start post ...
-func __reverse(pre, start, end *ListNode) {
+func __reverse(pre, start, end, post *ListNode) {
 	// pre start ... end post ...
 	if end == nil || start == nil {
 		return
 	}
-
-	post := end.Next
 
 	dummy := &ListNode{Next: start}
 
@@ -62,7 +59,7 @@ func __reverse(pre, start, end *ListNode) {
 		current = next
 	}
 
-	// now ->  pre|end ... start|post ...
+	// now: pre->start|end ... start|end->post ..., 连接起来->pre end ... start post ...
 	pre.Next = end
 	start.Next = post
 }
