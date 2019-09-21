@@ -9,9 +9,14 @@ func findSubstring(s string, words []string) []int {
 	// 依次滑行s，看看是否匹配（优化可能需要KMP）
 	var res []int
 
-	l := len(words) * len(words[0])
+	lenWord := len(words[0])
+	l := len(words) * lenWord
+	wordsCntMap := make(map[string]int)
+	for _, word := range words {
+		wordsCntMap[word]++
+	}
 	for i := 0; i+l-1 < len(s); i++ {
-		if match(s[i:i+l], words) {
+		if match(s[i:i+l], wordsCntMap, lenWord) {
 			res = append(res, i)
 		}
 	}
@@ -19,29 +24,20 @@ func findSubstring(s string, words []string) []int {
 	return res
 }
 
-func match(s string, words []string) bool {
-	used := make([]bool, len(words))
-	return _match(s, words, used, len(words), len(words[0]), 0)
-}
-
-func _match(target string, words []string, used []bool, remain int, step int, matchedPart int) bool {
-	if remain == 0 {
-		return true
+// 参考其他人的思路，将该段分成跟words一样的段落，然后比较双方各个单词数数目是否一致
+func match(s string, wordsCntMap map[string]int, lenWord int) bool {
+	cntMap := make(map[string]int)
+	for i := 0; i < len(s); i += lenWord {
+		cntMap[s[i:i+lenWord]]++
 	}
 
-	subTarget := target[matchedPart : matchedPart+step]
-	for i := 0; i < len(words); i++ {
-		if !used[i] && words[i] == subTarget {
-			used[i] = true
-
-			matched := _match(target, words, used, remain-1, step, matchedPart+step)
-			if matched {
-				return true
-			}
-
-			used[i] = false
+	if len(cntMap) != len(wordsCntMap) {
+		return false
+	}
+	for word, cnt := range wordsCntMap {
+		if cntMap[word] != cnt {
+			return false
 		}
 	}
-
-	return false
+	return true
 }
