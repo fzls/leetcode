@@ -26,11 +26,29 @@ func divide(dividend int, divisor int) int {
 }
 
 func _divide(dividend int, divisor int) int {
+	if dividend < divisor {
+		return 0
+	}
+
 	// dividend >= 0, divisor > 0
 	res := 0
-	for dividend >= divisor {
-		dividend -= divisor
-		res++
+
+	// 假设dividend = (fi*2^i + ... fo*2^0)divisor，计算出最大的这个fi，然后每次减去2^fi
+	factor := uint(0)
+	for (dividend >> factor) >= divisor {
+		factor++
+	}
+	factor--
+
+	for {
+		if dividend>>factor >= divisor {
+			dividend -= divisor << factor
+			res += 1 << factor
+		}
+		if factor == 0 {
+			break
+		}
+		factor--
 	}
 	return res
 }

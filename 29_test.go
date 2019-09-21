@@ -28,6 +28,14 @@ func Test_divide(t *testing.T) {
 			dividend int
 			divisor  int
 		}{dividend: -2147483648, divisor: -1}, want: 2147483647},
+		{name: "test", args: struct {
+			dividend int
+			divisor  int
+		}{dividend: 0, divisor: 1}, want: 0},
+		{name: "test", args: struct {
+			dividend int
+			divisor  int
+		}{dividend: 1, divisor: 2}, want: 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
