@@ -11,6 +11,8 @@ func findSubstring(s string, words []string) []int {
 
 	lenWord := len(words[0])
 	l := len(words) * lenWord
+
+	// 参考其他人的思路，将该段分成跟words一样的段落，然后比较双方各个单词数数目是否一致
 	wordsCntMap := make(map[string]int)
 	for _, word := range words {
 		wordsCntMap[word]++
@@ -45,7 +47,6 @@ func findSubstring(s string, words []string) []int {
 	return res
 }
 
-// 参考其他人的思路，将该段分成跟words一样的段落，然后比较双方各个单词数数目是否一致
 func match(cntMap, wordsCntMap map[string]int) bool {
 	if len(cntMap) != len(wordsCntMap) {
 		return false
