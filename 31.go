@@ -1,7 +1,5 @@
 package leetcode
 
-import "sort"
-
 // 2019/09/22 23:10 by fzls
 // 除了举例，别忘了画图，本题单单举例可能看不出太多东西，但是一画图就很清晰了
 // 最小的排列是完全顺序的，最大的排列是完全逆序的，也就是说排列递增的过程其实是让逆序对增加的过程，所以可以考虑转化为如果使当前排列的逆序对增加最小值
@@ -15,9 +13,9 @@ func nextPermutation(nums []int) {
 	for ; i >= 0; i-- {
 		// 找到第一个连续顺序队 i, i+1
 		if nums[i] < nums[i+1] {
-			// 从后往前找到第一个与该顺序对左元素构成顺序对的元素
-			j := last - sort.Search(last-i, func(idx int) bool {
-				return nums[last-idx] > nums[i]
+			// 二分查找最后一个与该顺序对左元素构成顺序对的元素
+			j := bs(i+1, last, func(idx int) bool {
+				return nums[idx] > nums[i]
 			})
 			// 交换这组逆序对
 			nums[j], nums[i] = nums[i], nums[j]
@@ -34,4 +32,20 @@ func nextPermutation(nums []int) {
 		i++
 		j--
 	}
+}
+
+// f(low-1) = true, f(high+1) = false
+// find j such that f(i) = true for all low-1 < i <= j, f(i)=false for all j< i < high+1
+func bs(low int, high int, f func(i int) bool) int {
+	for low <= high {
+		j := int(uint(low+high) >> 1)
+		if f(j) {
+			low = j + 1
+			// for i < low, we have f(i) == true
+		} else {
+			high = j - 1
+			// for i > high, we have f(i) == false
+		}
+	}
+	return low - 1
 }
