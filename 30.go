@@ -12,6 +12,7 @@ func findSubstring(s string, words []string) []int {
 	lenWord := len(words[0])
 	l := len(words) * lenWord
 
+	// 核心在于最开始不要直接按字符串匹配的思路走，看到要求words每个元素出现一次，且顺序不限，就应该想到转为比较各个字符串的数目是否相等来解决
 	// 参考其他人的思路，将该段分成跟words一样的段落，然后比较双方各个单词数数目是否一致
 	wordsCntMap := make(map[string]int)
 	for _, word := range words {
