@@ -21,30 +21,36 @@ func search(nums []int, target int) int {
 	// 其他情况
 	low := 0
 	high := len(nums) - 1
+	// 对多种情况进行分类讨论
 	for low <= high {
 		i := int(uint(low+high) >> 1)
 		if nums[i] == target {
 			return i
 		} else if nums[i] < target {
-			if nums[i] >= nums[low] {
+			if nums[low] <= nums[i] {
+				// nums[low] <= nums[i] < target
 				low = i + 1
 			} else if nums[i] <= nums[high] {
 				if nums[high] < target {
+					// nums[i] <= nums[high] < target
 					high = i - 1
 				} else {
+					// nums[i] < target <= nums[high]
 					return __bs(nums, i+1, high, target)
 				}
 			}
 		} else {
-			// nums[i]>target
-			if nums[i] >= nums[low] {
-				if nums[low] > target {
+			if nums[i] <= nums[high] {
+				// target < nums[i] <= nums[high]
+				high = i - 1
+			} else if nums[low] <= nums[i] {
+				if target < nums[low] {
+					// target < nums[low] <= nums[i]
 					low = i + 1
 				} else {
+					// nums[low] <= target <= nums[i]
 					return __bs(nums, low, i-1, target)
 				}
-			} else if nums[i] <= nums[high] {
-				high = i - 1
 			}
 		}
 	}
