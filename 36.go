@@ -18,18 +18,24 @@ func isValidSudoku(board [][]byte) bool {
 	}
 
 	used := make([]bool, 10)
+	checkUsed := func(row, column int) bool {
+		if board[row][column] == '.' {
+			return false
+		}
+		num := board[row][column] - '0'
+		if used[num] {
+			return true
+		}
+		used[num] = true
+		return false
+	}
 	// 判断每一行
 	for row := 0; row < _ROWS; row++ {
 		reset(used)
 		for column := 0; column < _COLUMNS; column++ {
-			if board[row][column] == '.' {
-				continue
-			}
-			num := board[row][column] - '0'
-			if used[num] {
+			if checkUsed(row, column) {
 				return false
 			}
-			used[num] = true
 		}
 	}
 
@@ -37,14 +43,9 @@ func isValidSudoku(board [][]byte) bool {
 	for column := 0; column < _COLUMNS; column++ {
 		reset(used)
 		for row := 0; row < _ROWS; row++ {
-			if board[row][column] == '.' {
-				continue
-			}
-			num := board[row][column] - '0'
-			if used[num] {
+			if checkUsed(row, column) {
 				return false
 			}
-			used[num] = true
 		}
 	}
 
@@ -55,14 +56,9 @@ func isValidSudoku(board [][]byte) bool {
 		startColumn := 3 * (i % 3)
 		for row := startRow; row < startRow+3; row++ {
 			for column := startColumn; column < startColumn+3; column++ {
-				if board[row][column] == '.' {
-					continue
-				}
-				num := board[row][column] - '0'
-				if used[num] {
+				if checkUsed(row, column) {
 					return false
 				}
-				used[num] = true
 			}
 		}
 	}
