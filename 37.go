@@ -3,10 +3,10 @@ package leetcode
 import "fmt"
 
 // 2019/10/03 1:43 by fzls
-func makeOccuranceSetList() []map[byte]struct{} {
-	var setList []map[byte]struct{}
+func makeOccuranceSetList() [][]bool {
+	var setList [][]bool
 	for i := 0; i < 9; i++ {
-		setList = append(setList, make(map[byte]struct{}))
+		setList = append(setList, make([]bool, 10))
 	}
 	return setList
 }
@@ -40,10 +40,10 @@ func solveSudoku(board [][]byte) {
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
 			if board[i][j] != '.' {
-				digit := board[i][j]
-				rows[i][digit] = struct{}{}
-				columns[j][digit] = struct{}{}
-				boxes[getBoxIndex(i, j)][digit] = struct{}{}
+				digit := board[i][j] - '0'
+				rows[i][digit] = true
+				columns[j][digit] = true
+				boxes[getBoxIndex(i, j)][digit] = true
 			}
 		}
 	}
@@ -56,8 +56,9 @@ func solveSudoku(board [][]byte) {
 	//printBoard(board)
 }
 
-func solveSudokuCore(board [][]byte, row, column int, rows, columns, boxes []map[byte]struct{}) bool {
+func solveSudokuCore(board [][]byte, row, column int, rows, columns, boxes [][]bool) bool {
 	if row == 9 && column == 0 {
+		// found solution
 		return true
 	}
 
@@ -72,22 +73,17 @@ func solveSudokuCore(board [][]byte, row, column int, rows, columns, boxes []map
 
 	if board[row][column] == '.' {
 		// 需要搜索不同组合
-		for digit := byte('1'); digit <= '9'; digit++ {
-			if _, used := rows[row][digit]; used {
-				continue
-			}
-			if _, used := columns[column][digit]; used {
-				continue
-			}
-			if _, used := boxes[getBoxIndex(row, column)][digit]; used {
+		boxIdx := getBoxIndex(row, column)
+		for digit := 1; digit <= 9; digit++ {
+			if rows[row][digit] || columns[column][digit] || boxes[boxIdx][digit] {
 				continue
 			}
 
 			// mark
-			board[row][column] = digit
-			rows[row][digit] = struct{}{}
-			columns[column][digit] = struct{}{}
-			boxes[getBoxIndex(row, column)][digit] = struct{}{}
+			board[row][column] = byte(digit) + '0'
+			rows[row][digit] = true
+			columns[column][digit] = true
+			boxes[boxIdx][digit] = true
 
 			// search
 			if solved := solveSudokuCore(board, nextRow, nextColumn, rows, columns, boxes); solved {
@@ -96,9 +92,9 @@ func solveSudokuCore(board [][]byte, row, column int, rows, columns, boxes []map
 
 			// unmark
 			board[row][column] = '.'
-			delete(rows[row], digit)
-			delete(columns[column], digit)
-			delete(boxes[getBoxIndex(row, column)], digit)
+			rows[row][digit] = false
+			columns[column][digit] = false
+			boxes[boxIdx][digit] = false
 		}
 	} else {
 		// 这个格子已经填过了
