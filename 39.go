@@ -8,6 +8,10 @@ func combinationSum(candidates []int, target int) [][]int {
 }
 
 func combinationSumCore(candidates []int, idx, target int, comb []int, combs *[][]int) {
+	if target < 0 {
+		return
+	}
+
 	if idx == -1 {
 		if target == 0 {
 			*combs = append(*combs, append([]int{}, comb...))
