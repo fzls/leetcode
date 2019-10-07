@@ -20,7 +20,9 @@ func combinationSum2Core(candidates []int, target int, idx int, useLast bool, co
 
 	if idx == len(candidates) {
 		if target == 0 {
-			*pCombs = append(*pCombs, append([]int{}, comb...))
+			res := make([]int, len(comb))
+			copy(res, comb)
+			*pCombs = append(*pCombs, res)
 		}
 		return
 	}
