@@ -8,9 +8,17 @@ func firstMissingPositive(nums []int) int {
 	sort.Ints(nums)
 	minNotExist := 1
 
-	for _, num := range nums {
+	for idx, num := range nums {
+		if num <= 0 {
+			continue
+		}
+		if idx != 0 && nums[idx-1] == num {
+			continue
+		}
 		if num == minNotExist {
 			minNotExist++
+		} else {
+			return minNotExist
 		}
 	}
 
