@@ -1,79 +1,37 @@
 package leetcode
 
-import (
-	"fmt"
-)
-
 // 2019/10/08 0:48 by fzls
 func multiply(num1 string, num2 string) string {
 	if num1[0] == '0' || num2[0] == '0' {
 		return "0"
 	}
 
-	var adds []string
+	mul := make([]int, len(num1)+len(num2))
 
-	for i := 0; i < len(num2); i++ {
-		// 计算num2[i] * num1
-		var mul []byte
-		var carry, prod, digit byte
-		for j := len(num1) - 1; j >= 0; j-- {
-			prod = (num2[i]-'0')*(num1[j]-'0') + carry
-
-			carry = prod / 10
-			digit = prod % 10
-			mul = append([]byte{digit + '0'}, mul...)
+	for i := len(num1) - 1; i >= 0; i-- {
+		n1 := int(num1[i] - '0')
+		for j := len(num2) - 1; j >= 0; j-- {
+			n2 := int(num2[j] - '0')
+			sum := mul[i+j+1] + n1*n2
+			mul[i+j+1] = sum % 10
+			mul[i+j] += sum / 10
 		}
-		if carry > 0 {
-			mul = append([]byte{carry + '0'}, mul...)
-		}
-		for z := 0; z < len(num2)-i-1; z++ {
-			mul = append(mul, '0')
-		}
-		adds = append(adds, string(mul))
 	}
 
-	fmt.Println(adds)
-
-	return addStr(adds)
-}
-
-func addStr(toAdds []string) string {
-	fmt.Println("addStr", toAdds)
-	if len(toAdds) == 0 {
-		return "0"
-	}
-	if len(toAdds) == 1 {
-		return toAdds[0]
+	var res []byte
+	if mul[0] == 0 {
+		res = make([]byte, 0, len(mul)-1)
+	} else {
+		res = make([]byte, 0, len(mul))
 	}
 
-	mid := len(toAdds) / 2
-	return addStr2(addStr(toAdds[:mid]), addStr(toAdds[mid:]))
-}
-
-func addStr2(num1 string, num2 string) string {
-	var sum []byte
-
-	i := len(num1) - 1
-	j := len(num2) - 1
-	var carry, digit byte
-	for i >= 0 || j >= 0 {
-		s := carry
-		if i >= 0 {
-			s += num1[i] - '0'
-		}
-		if j >= 0 {
-			s += num2[j] - '0'
+	for i := 0; i < len(mul); i++ {
+		if i == 0 && mul[i] == 0 {
+			continue
 		}
 
-		carry = s / 10
-		digit = s % 10
-		sum = append([]byte{digit + '0'}, sum...)
+		res = append(res, byte(mul[i])+'0')
+	}
 
-		i--
-		j--
-	}
-	if carry != 0 {
-		sum = append([]byte{'1'}, sum...)
-	}
-	return string(sum)
+	return string(res)
 }
