@@ -38,6 +38,7 @@ func multiply(num1 string, num2 string) string {
 }
 
 func addStr(toAdds []string) string {
+	fmt.Println("addStr", toAdds)
 	if len(toAdds) == 0 {
 		return "0"
 	}
@@ -45,11 +46,8 @@ func addStr(toAdds []string) string {
 		return toAdds[0]
 	}
 
-	sum := toAdds[0]
-	for i := 1; i < len(toAdds); i++ {
-		sum = addStr2(sum, toAdds[i])
-	}
-	return sum
+	mid := len(toAdds) / 2
+	return addStr2(addStr(toAdds[:mid]), addStr(toAdds[mid:]))
 }
 
 func addStr2(num1 string, num2 string) string {
