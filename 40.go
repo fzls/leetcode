@@ -1,7 +1,6 @@
 package leetcode
 
 import (
-	"reflect"
 	"sort"
 )
 
@@ -14,6 +13,20 @@ func combinationSum2(candidates []int, target int) [][]int {
 	return combs
 }
 
+func sameList(a, b []int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := 0; i < len(a); i++ {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 func combinationSum2Core(candidates []int, target int, idx int, comb []int, pCombs *[][]int) {
 	if target < 0 {
 		return
@@ -22,7 +35,7 @@ func combinationSum2Core(candidates []int, target int, idx int, comb []int, pCom
 	if idx == len(candidates) {
 		if target == 0 {
 			for _, cb := range *pCombs {
-				if reflect.DeepEqual(comb, cb) {
+				if sameList(comb, cb) {
 					return
 				}
 			}
