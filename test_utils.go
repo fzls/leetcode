@@ -42,3 +42,9 @@ func sortIntListList(data [][]int) {
 		return lessIntList(data[i], data[j])
 	})
 }
+
+func sortIntPermutateList(data [][]int) {
+	sort.Slice(data, func(i, j int) bool {
+		return lessIntList(data[i], data[j])
+	})
+}

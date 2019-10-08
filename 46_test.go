@@ -26,30 +26,11 @@ func Test_permute(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := permute(tt.args.nums)
-			sortIntListList(got)
-			sortIntListList(tt.want)
+			sortIntPermutateList(got)
+			sortIntPermutateList(tt.want)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("permute(%v) = %v, want %v", tt.args.nums, got, tt.want)
 			}
-		})
-	}
-}
-
-func Test_permuteCore(t *testing.T) {
-	type args struct {
-		nums []int
-		idx  int
-		pRes *[][]int
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-	// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			permuteCore(tt.args.nums, tt.args.idx, tt.args.pRes)
 		})
 	}
 }
