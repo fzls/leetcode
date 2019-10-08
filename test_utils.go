@@ -1,5 +1,7 @@
 package leetcode
 
+import "sort"
+
 // 2019/09/18 0:23 by fzls
 func listIntToSet(nums []int) map[int]struct{} {
 	set := make(map[int]struct{}, len(nums))
@@ -15,4 +17,28 @@ func listStringToSet(nums []string) map[string]struct{} {
 		set[num] = struct{}{}
 	}
 	return set
+}
+
+func lessIntList(a, b []int) bool {
+	if len(a) == 0 && len(b) == 0 {
+		return true
+	} else if len(a) == 0 {
+		return true
+	} else if len(b) == 0 {
+		return false
+	} else {
+		if a[0] != b[0] {
+			return a[0] < b[0]
+		}
+		return lessIntList(a[1:], b[1:])
+	}
+}
+
+func sortIntListList(data [][]int) {
+	for i := 0; i < len(data); i++ {
+		sort.Ints(data[i])
+	}
+	sort.Slice(data, func(i, j int) bool {
+		return lessIntList(data[i], data[j])
+	})
 }

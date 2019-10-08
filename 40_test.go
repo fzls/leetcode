@@ -2,7 +2,6 @@ package leetcode
 
 import (
 	"reflect"
-	"sort"
 	"testing"
 )
 
@@ -46,33 +45,8 @@ func Test_combinationSum2(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := combinationSum2(tt.args.candidates, tt.args.target)
-
-			var less func(a, b []int) bool
-			less = func(a, b []int) bool {
-				if len(a) == 0 && len(b) == 0 {
-					return true
-				} else if len(a) == 0 {
-					return true
-				} else if len(b) == 0 {
-					return false
-				} else {
-					if a[0] != b[0] {
-						return a[0] < b[0]
-					}
-					return less(a[1:], b[1:])
-				}
-			}
-
-			sortFunc := func(data [][]int) {
-				for i := 0; i < len(data); i++ {
-					sort.Ints(data[i])
-				}
-				sort.Slice(data, func(i, j int) bool {
-					return less(data[i], data[j])
-				})
-			}
-			sortFunc(got)
-			sortFunc(tt.want)
+			sortIntListList(got)
+			sortIntListList(tt.want)
 
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("combinationSum2(%v) \nres  %v, \nwant %v", tt.args, got, tt.want)
