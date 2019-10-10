@@ -5,6 +5,7 @@ func trap(height []int) int {
 	rain := 0
 
 	left := 0
+	// 找到每一个蓄水池的边缘来计算蓄水量
 	for left < len(height)-1 {
 		// 从当前为止找到第一个大于右侧一格的地方作为本次的池子的左侧
 		for left < len(height)-1 && !(height[left] > height[left+1]) {
@@ -22,20 +23,20 @@ func trap(height []int) int {
 		if right == len(height) {
 			break
 		}
-		// 如果右侧大于本位置，则继续向右扩展右侧边缘
-		for right < len(height)-1 && height[right+1] >= height[right] {
-			right++
-		}
-		// 如果继续往右扩展能找到一个大于等于左侧位置的地方，则直接将其更新位右侧边缘
+
 		for idx := right; idx < len(height); idx++ {
-			if idx != right && height[idx] >= height[right] {
-				right = idx
-			}
+			// 若遇到大于等于左侧位置的地方，则直接将其更新位本次的最终右侧边缘
 			if height[idx] >= height[left] {
 				right = idx
 				break
 			}
+
+			// 如果继续往右扩展能找到一个大于等于当前右侧边缘的地方，则更新为新的边缘
+			if height[idx] >= height[right] {
+				right = idx
+			}
 		}
+
 		// 计算从left到right的水面高度，然后计算中间池子大小
 		rainHeight := height[left]
 		if rainHeight > height[right] {
