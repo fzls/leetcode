@@ -17,7 +17,7 @@ func combineCore(n int, k int, comb []int, pRes *[][]int) {
 		return
 	}
 
-	if n <= 0 {
+	if n < k {
 		return
 	}
 
