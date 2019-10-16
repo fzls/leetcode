@@ -1,40 +1,55 @@
 package leetcode
 
-type __isMatch_Key struct {
-	s, p string
-}
-
-var __isMatch_cache = make(map[__isMatch_Key]bool)
-
 // 2019/10/16 23:45 by fzls
 
 func __isMatch(s string, p string) bool {
-	return _isMatch(s, p)
+	return newIsMatchSolution(s, p).solve()
 }
 
-func _isMatch(s string, p string) (matched bool) {
-	if v, ok := __isMatch_cache[__isMatch_Key{s, p}]; ok {
+type __isMatch_Key struct {
+	sIdx, pIdx int
+}
+
+type IsMatchSolution struct {
+	s, p []byte
+
+	cache map[__isMatch_Key]bool
+}
+
+func newIsMatchSolution(s, p string) *IsMatchSolution {
+	return &IsMatchSolution{
+		s:     []byte(s),
+		p:     []byte(p),
+		cache: make(map[__isMatch_Key]bool),
+	}
+}
+func (so *IsMatchSolution) solve() bool {
+	return so.solveCore(0, 0)
+}
+
+func (so *IsMatchSolution) solveCore(sIdx, pIdx int) (matched bool) {
+	if v, ok := so.cache[__isMatch_Key{sIdx, pIdx}]; ok {
 		return v
 	}
 	defer func() {
-		__isMatch_cache[__isMatch_Key{s, p}] = matched
+		so.cache[__isMatch_Key{sIdx, pIdx}] = matched
 	}()
 
-	if len(p) == 0 {
-		return len(s) == 0
+	if pIdx == len(so.p) {
+		return sIdx == len(so.s)
 	}
 
-	if len(s) == 0 && p[0] != '*' {
+	if sIdx == len(so.s) && so.p[pIdx] != '*' {
 		return false
 	}
 
-	switch p[0] {
+	switch so.p[pIdx] {
 	case '?':
-		return _isMatch(s[1:], p[1:])
+		return so.solveCore(sIdx+1, pIdx+1)
 	case '*':
 		// 0 || any
-		return _isMatch(s, p[1:]) || len(s) > 0 && _isMatch(s[1:], p)
+		return so.solveCore(sIdx, pIdx+1) || sIdx+1 <= len(so.s) && so.solveCore(sIdx+1, pIdx)
 	default:
-		return s[0] == p[0] && _isMatch(s[1:], p[1:])
+		return so.s[sIdx] == so.p[pIdx] && so.solveCore(sIdx+1, pIdx+1)
 	}
 }

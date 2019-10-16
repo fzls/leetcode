@@ -35,7 +35,7 @@ func Test__isMatch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := _isMatch(tt.args.s, tt.args.p); got != tt.want {
+			if got := __isMatch(tt.args.s, tt.args.p); got != tt.want {
 				t.Errorf("_isMatch(%v) = %v, want %v", tt.args, got, tt.want)
 			}
 		})
