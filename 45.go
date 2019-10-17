@@ -17,9 +17,16 @@ func jump(nums []int) int {
 		}
 
 		ms := math.MaxInt32
-		for j := i + 1; j <= i+nums[i] && j < n; j++ {
+		maxIdx := i + nums[i]
+		if maxIdx >= n {
+			maxIdx = n - 1
+		}
+		for j := maxIdx; j > i; j-- {
 			if dp[j] < ms {
 				ms = dp[j]
+				if ms == 1 {
+					break
+				}
 			}
 		}
 		dp[i] = 1 + ms
