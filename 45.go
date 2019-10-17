@@ -1,12 +1,14 @@
 package leetcode
 
-import (
-	"math"
-)
+import "math"
 
 // 2019/10/17 23:56 by fzls
 func jump(nums []int) int {
 	n := len(nums)
+	if n <= 1 {
+		return 0
+	}
+
 	dp := make([]int, n)
 	dp[n-1] = 0
 
@@ -16,11 +18,11 @@ func jump(nums []int) int {
 			continue
 		}
 
-		ms := math.MaxInt32
 		maxIdx := i + nums[i]
 		if maxIdx >= n {
 			maxIdx = n - 1
 		}
+		ms := math.MaxInt32
 		for j := maxIdx; j > i; j-- {
 			if dp[j] < ms {
 				ms = dp[j]
