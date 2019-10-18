@@ -48,3 +48,27 @@ func sortIntPermutateList(data [][]int) {
 		return lessIntList(data[i], data[j])
 	})
 }
+
+func lessStringList(a, b []string) bool {
+	if len(a) == 0 && len(b) == 0 {
+		return true
+	} else if len(a) == 0 {
+		return true
+	} else if len(b) == 0 {
+		return false
+	} else {
+		if a[0] != b[0] {
+			return a[0] < b[0]
+		}
+		return lessStringList(a[1:], b[1:])
+	}
+}
+
+func sortStringPermutateList(data [][]string) {
+	for i := 0; i < len(data); i++ {
+		sort.Strings(data[i])
+	}
+	sort.Slice(data, func(i, j int) bool {
+		return lessStringList(data[i], data[j])
+	})
+}
