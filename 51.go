@@ -92,6 +92,7 @@ func (qb *QueenBoard) solveCore(row int) {
 	}
 }
 
+// 优化内存使用
 type BitMap struct {
 	N     int
 	Bytes []byte
