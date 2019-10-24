@@ -10,12 +10,12 @@ func solveNQueens(n int) [][]string {
 
 type QueenBoard struct {
 	N     int
-	Board *BitMap
+	Board [][]bool
 
-	Rows        *BitMap
-	Colomns     *BitMap
-	LeftAngles  *BitMap // /
-	RightAngles *BitMap // \
+	Rows        []bool
+	Colomns     []bool
+	LeftAngles  []bool // /
+	RightAngles []bool // \
 
 	Results [][]string
 }
@@ -28,32 +28,32 @@ func NewQueenBoard(n int) *QueenBoard {
 	}
 	return &QueenBoard{
 		N:           n,
-		Board:       newBitMap(n * n),
-		Rows:        newBitMap(n),
-		Colomns:     newBitMap(n),
-		LeftAngles:  newBitMap(2*n - 1),
-		RightAngles: newBitMap(2*n - 1),
+		Board:       board,
+		Rows:        make([]bool, n),
+		Colomns:     make([]bool, n),
+		LeftAngles:  make([]bool, 2*n-1),
+		RightAngles: make([]bool, 2*n-1),
 	}
 }
 
 func (qb *QueenBoard) CanPut(row, col int) bool {
-	return !(qb.Rows.IsSet(row) || qb.Colomns.IsSet(col) || qb.LeftAngles.IsSet(row+col) || qb.RightAngles.IsSet(row-col+(qb.N-1)))
+	return !(qb.Rows[row] || qb.Colomns[col] || qb.LeftAngles[row+col] || qb.RightAngles[row-col+(qb.N-1)])
 }
 
 func (qb *QueenBoard) Put(row, col int) {
-	qb.Board.Set(row*qb.N + col)
-	qb.Rows.Set(row)
-	qb.Colomns.Set(col)
-	qb.LeftAngles.Set(row + col)
-	qb.RightAngles.Set(row - col + (qb.N - 1))
+	qb.Board[row][col] = true
+	qb.Rows[row] = true
+	qb.Colomns[col] = true
+	qb.LeftAngles[row+col] = true
+	qb.RightAngles[row-col+(qb.N-1)] = true
 }
 
 func (qb *QueenBoard) Remove(row, col int) {
-	qb.Board.UnSet(row*qb.N + col)
-	qb.Rows.UnSet(row)
-	qb.Colomns.UnSet(col)
-	qb.LeftAngles.UnSet(row + col)
-	qb.RightAngles.UnSet(row - col + (qb.N - 1))
+	qb.Board[row][col] = false
+	qb.Rows[row] = false
+	qb.Colomns[col] = false
+	qb.LeftAngles[row+col] = false
+	qb.RightAngles[row-col+(qb.N-1)] = false
 }
 
 func (qb *QueenBoard) Solve() {
@@ -67,7 +67,7 @@ func (qb *QueenBoard) solveCore(row int) {
 		for i := 0; i < qb.N; i++ {
 			line := make([]byte, qb.N)
 			for j := 0; j < qb.N; j++ {
-				if qb.Board.IsSet(i*qb.N + j) {
+				if qb.Board[i][j] == true {
 					line[j] = 'Q'
 				} else {
 					line[j] = '.'
@@ -90,36 +90,4 @@ func (qb *QueenBoard) solveCore(row int) {
 		qb.solveCore(row + 1)
 		qb.Remove(row, col)
 	}
-}
-
-// 优化内存使用
-type BitMap struct {
-	N     int
-	Bytes []byte
-}
-
-func newBitMap(n int) *BitMap {
-	return &BitMap{
-		N:     n,
-		Bytes: make([]byte, (n+7)/8),
-	}
-}
-
-func (bm *BitMap) getByteAndBitIndex(n int) (byteIndex int, bitIndex uint) {
-	return n / 8, uint(n % 8)
-}
-
-func (bm *BitMap) IsSet(n int) bool {
-	bt, idx := bm.getByteAndBitIndex(n)
-	return bm.Bytes[bt]&(1<<(7-idx)) != 0
-}
-
-func (bm *BitMap) Set(n int) {
-	bt, idx := bm.getByteAndBitIndex(n)
-	bm.Bytes[bt] |= 1 << (7 - idx)
-}
-
-func (bm *BitMap) UnSet(n int) {
-	bt, idx := bm.getByteAndBitIndex(n)
-	bm.Bytes[bt] &= ^(1 << (7 - idx))
 }
