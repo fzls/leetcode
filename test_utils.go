@@ -64,10 +64,16 @@ func lessStringList(a, b []string) bool {
 	}
 }
 
-func sortStringPermutateList(data [][]string) {
+func sortStringList(data [][]string) {
 	for i := 0; i < len(data); i++ {
 		sort.Strings(data[i])
 	}
+	sort.Slice(data, func(i, j int) bool {
+		return lessStringList(data[i], data[j])
+	})
+}
+
+func sortStringPermutateList(data [][]string) {
 	sort.Slice(data, func(i, j int) bool {
 		return lessStringList(data[i], data[j])
 	})

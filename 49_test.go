@@ -29,8 +29,8 @@ func Test_groupAnagrams(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := groupAnagrams(tt.args.strs)
-			sortStringPermutateList(got)
-			sortStringPermutateList(tt.want)
+			sortStringList(got)
+			sortStringList(tt.want)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("groupAnagrams() \nres  %v, \nwant %v", got, tt.want)
 			}

@@ -16,12 +16,13 @@ func groupAnagrams(strs []string) [][]string {
 		})
 
 		ss := string(bs)
-		if idx, ok := mp[ss]; ok {
-			res[idx] = append(res[idx], s)
-		} else {
-			res = append(res, []string{s})
-			mp[ss] = len(res) - 1
+		idx, ok := mp[ss]
+		if !ok {
+			res = append(res, []string{})
+			idx = len(res) - 1
+			mp[ss] = idx
 		}
+		res[idx] = append(res[idx], s)
 	}
 
 	return res
