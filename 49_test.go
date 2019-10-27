@@ -37,3 +37,11 @@ func Test_groupAnagrams(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkGroupAnagrams(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		groupAnagrams([]string{
+			"eat", "tea", "tan", "ate", "nat", "bat",
+		})
+	}
+}
