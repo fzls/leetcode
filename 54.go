@@ -21,29 +21,33 @@ func spiralOrder(matrix [][]int) []int {
 		if endX < startX || endY < startY {
 			break
 		}
+		if endX == startX {
+			for y := startY; y <= endY; y++ {
+				res = append(res, matrix[startX][y])
+			}
+			break
+		}
+		if endY == startY {
+			for x := startX; x <= endX; x++ {
+				res = append(res, matrix[x][startY])
+			}
+			break
+		}
 
-		// [x, y] -> [x, y + n-2*step -1]
-		for y := startY; y <= endY; y++ {
+		for y := startY; y <= endY-1; y++ {
 			res = append(res, matrix[startX][y])
 		}
 
-		// [x+1, y+ n-2*step -1] -> [x + m-2*step-1, y+ n-2*step - 1]
-		for x := startX + 1; x <= endX; x++ {
+		for x := startX; x <= endX-1; x++ {
 			res = append(res, matrix[x][endY])
 		}
 
-		// [x + m-2*step -1, y + n-2*step-1 -1] -> [x + m-2*step - 1, y]
-		if startX != endX {
-			for y := endY - 1; y >= startY; y-- {
-				res = append(res, matrix[endX][y])
-			}
+		for y := endY; y >= startY+1; y-- {
+			res = append(res, matrix[endX][y])
 		}
 
-		// [x + m-2*step-1 -1, y] -> [x + 1, y]
-		if startY != endY {
-			for x := endX - 1; x >= startX+1; x-- {
-				res = append(res, matrix[x][startY])
-			}
+		for x := endX; x >= startX+1; x-- {
+			res = append(res, matrix[x][startY])
 		}
 
 		step++
