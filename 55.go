@@ -10,18 +10,15 @@ func canJump(nums []int) bool {
 
 	dp := make([]bool, n)
 	dp[n-1] = true
+	lastCanJump := n - 1
 
 	for i := n - 1; i >= 0; i-- {
-		maxIdx := i + nums[i]
-		if maxIdx >= n {
-			maxIdx = n - 1
+		if i+nums[i] < lastCanJump {
+			continue
 		}
-		for j := maxIdx; j >= i+1; j-- {
-			if dp[j] {
-				dp[i] = true
-				break
-			}
-		}
+
+		dp[i] = true
+		lastCanJump = i
 	}
 
 	return dp[0]
