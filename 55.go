@@ -8,8 +8,6 @@ func canJump(nums []int) bool {
 
 	n := len(nums)
 
-	dp := make([]bool, n)
-	dp[n-1] = true
 	lastCanJump := n - 1
 
 	for i := n - 1; i >= 0; i-- {
@@ -17,9 +15,8 @@ func canJump(nums []int) bool {
 			continue
 		}
 
-		dp[i] = true
 		lastCanJump = i
 	}
 
-	return dp[0]
+	return lastCanJump == 0
 }
