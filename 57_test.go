@@ -17,7 +17,7 @@ func Test_insert(t *testing.T) {
 		args args
 		want [][]int
 	}{
-		{name: "test1", args: struct {
+		{name: "test", args: struct {
 			intervals   [][]int
 			newInterval []int
 		}{intervals: [][]int{
@@ -27,7 +27,7 @@ func Test_insert(t *testing.T) {
 			{1, 5},
 			{6, 9},
 		}},
-		{name: "test2", args: struct {
+		{name: "test", args: struct {
 			intervals   [][]int
 			newInterval []int
 		}{intervals: [][]int{
@@ -41,7 +41,7 @@ func Test_insert(t *testing.T) {
 			{3, 10},
 			{12, 16},
 		}},
-		{name: "test3", args: struct {
+		{name: "test", args: struct {
 			intervals   [][]int
 			newInterval []int
 		}{intervals: [][]int{
@@ -52,7 +52,18 @@ func Test_insert(t *testing.T) {
 			{4, 5},
 			{6, 9},
 		}},
-		{name: "test4", args: struct {
+		{name: "test", args: struct {
+			intervals   [][]int
+			newInterval []int
+		}{intervals: [][]int{
+			{1, 3},
+			{6, 9},
+		}, newInterval: []int{-1, 0}}, want: [][]int{
+			{-1, 0},
+			{1, 3},
+			{6, 9},
+		}},
+		{name: "test", args: struct {
 			intervals   [][]int
 			newInterval []int
 		}{intervals: [][]int{}, newInterval: []int{4, 5}}, want: [][]int{

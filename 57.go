@@ -13,10 +13,10 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 
 	var res [][]int
 
-	for idx := 0; idx < insertIdx; idx++ {
-		res = append(res, intervals[idx])
-	}
+	// 根据定义，在插入位置之前的必定是属于最终结果集的
+	res = append(res, intervals[:insertIdx]...)
 
+	// 处理新插入的区间与前一个区间是否需要合并
 	if len(res) != 0 && newInterval[0] <= res[len(res)-1][1] {
 		if newInterval[1] > res[len(res)-1][1] {
 			res[len(res)-1][1] = newInterval[1]
@@ -25,13 +25,17 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 		res = append(res, newInterval)
 	}
 
+	// 处理新插入的区间是否需要与后续的区间进行合并
 	for idx := insertIdx; idx < n; idx++ {
 		if intervals[idx][0] <= res[len(res)-1][1] {
+			// 该部分需要与新插入的合并到一起
 			if intervals[idx][1] > res[len(res)-1][1] {
 				res[len(res)-1][1] = intervals[idx][1]
 			}
 		} else {
-			res = append(res, intervals[idx])
+			// 新插入的区间已合并完成，后续均已保证不会重叠，可直接返回
+			res = append(res, intervals[idx:]...)
+			break
 		}
 	}
 
