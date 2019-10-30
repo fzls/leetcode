@@ -11,7 +11,6 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 		return intervals[i][0] > newInterval[0]
 	})
 
-	// 结果集
 	var res [][]int
 
 	// 根据定义，在插入位置之前的必定是属于最终结果集的
