@@ -14,14 +14,14 @@ func generateMatrix(n int) [][]int {
 	}
 
 	idx := 1
-	// assign value to res[row][col]
+	// assign value to res[row][col]; left right for col; top bottom for row;
 	for step := 0; step <= (n-1)/2; step++ {
 		// find left top and right bottom
 		startRow, startCol := step, step
 		rowSize, colSize := n-2*step, n-2*step
 		endRow, endCol := startRow+rowSize-1, startCol+colSize-1
 
-		// left top[inclusive] to right top[inclusive]
+		// left[inclusive] top to right[inclusive] top
 		for col := startCol; col <= endCol; col++ {
 			res[startRow][col] = idx
 			idx++
@@ -33,7 +33,7 @@ func generateMatrix(n int) [][]int {
 			idx++
 		}
 
-		// if rowSize > 1, right bottom[exclusive] to left bottom[inclusive]
+		// if rowSize > 1, right[exclusive] bottom to left[inclusive] bottom
 		if rowSize > 1 {
 			for col := endCol - 1; col >= startCol; col-- {
 				res[endRow][col] = idx
