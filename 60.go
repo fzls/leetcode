@@ -31,7 +31,22 @@ func getPermutation(n int, k int) string {
 		nums[i] = i + 1
 	}
 
-	// iter（this is first)
+	// prune
+	if n > 1 {
+		// find the first number by repeated reducing k by multiple of fact[n-1]
+		first := 1
+		for k > fact[n-1] {
+			first++
+			k -= fact[n-1]
+		}
+		// now move first number to front and those before it to right
+		for i := first - 1; i >= 1; i-- {
+			nums[i] = nums[i-1]
+		}
+		nums[0] = first
+	}
+
+	//iter（this is first)
 	//fmt.Println(n, k)
 	//fmt.Println(nums)
 	for i := 1; i < k; i++ {
