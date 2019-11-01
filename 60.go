@@ -47,10 +47,11 @@ func batchPerm(k int, nums []int) {
 		batchSize := fact[n-(idx+1)] // number of perms for idx+1,idx+2,...n-2,n-1
 
 		// find the first number by repeated reducing k by multiple of fact[n-1]
-		targetIdx := idx
-		for k > batchSize {
-			targetIdx++
-			k -= batchSize
+		targetIdx := idx + k/batchSize
+		k = k % batchSize
+		if k == 0 {
+			k = batchSize
+			targetIdx--
 		}
 		// now move target number to front and those before it to right
 		target := nums[targetIdx]
