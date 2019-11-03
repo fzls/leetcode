@@ -2,26 +2,25 @@ package leetcode
 
 // 2019/11/03 20:23 by fzls
 func uniquePaths(m int, n int) int {
-	// todo: check if can use less memory
-	// init dp
-	dp := make([][]int, m)
-	buf := make([]int, m*n)
-	for i := 0; i < m; i++ {
-		dp[i], buf = buf[:n], buf[n:]
+	if m <= 0 || n <= 0 {
+		return 0
+	}
+	if m == 1 || n == 1 {
+		return 1
 	}
 
-	// dp[i][j] = dp[i+1][j] + dp[i][j+1]
-	for row := 0; row < m; row++ {
-		dp[row][n-1] = 1
+	// init dp
+	dp := make([]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = 1
 	}
-	for col := 0; col < n; col++ {
-		dp[m-1][col] = 1
-	}
+
+	// at row i: dp[j] = dp[j](last row) + dp[j+1](this row)
 	for row := m - 2; row >= 0; row-- {
 		for col := n - 2; col >= 0; col-- {
-			dp[row][col] = dp[row+1][col] + dp[row][col+1]
+			dp[col] += dp[col+1]
 		}
 	}
 
-	return dp[0][0]
+	return dp[0]
 }
