@@ -5,92 +5,126 @@ package leetcode
 // exp: "   -12.345e-678    "
 // exp: "   -.345e-678    "
 func isNumber(s string) bool {
-	if len(s) == 0 {
-		return false
-	}
-
-	pos := 0
-	ok := true
-
-	readOptionalSpace(s, &pos)
-	readOptionalSign(s, &pos)
-	if ok = readDecimal(s, &pos); !ok {
-		return false
-	}
-	if ok = readOptionalExponent(s, &pos); !ok {
-		return false
-	}
-	readOptionalSpace(s, &pos)
-
-	return pos == len(s)
+	return NewNumberValidator(s).IsNumber()
 }
 
-func readOptionalSpace(s string, pos *int) {
-	for *pos < len(s) && s[*pos] == ' ' {
-		*pos++
+type NumberValidator struct {
+	s   string
+	pos int
+}
+
+func NewNumberValidator(s string) *NumberValidator {
+	return &NumberValidator{
+		s: s,
 	}
 }
 
-func readOptionalSign(s string, pos *int) {
-	if *pos < len(s) && (s[*pos] == '+' || s[*pos] == '-') {
-		*pos++
+func (v *NumberValidator) IsNumber() bool {
+	if v.isEmpty() {
+		return false
+	}
+
+	v.readOptionalSpace()
+	v.readOptionalSign()
+	if ok := v.readDecimal(); !ok {
+		return false
+	}
+	if ok := v.readOptionalExponent(); !ok {
+		return false
+	}
+	v.readOptionalSpace()
+
+	return v.isValidFinalState()
+}
+
+func (v *NumberValidator) readOptionalSpace() {
+	for v.peek() == ' ' {
+		v.next()
 	}
 }
 
-func readDecimal(s string, pos *int) bool {
+func (v *NumberValidator) readOptionalSign() {
+	if v.peek() == '+' || v.peek() == '-' {
+		v.next()
+	}
+}
+
+func (v *NumberValidator) readDecimal() bool {
 	// xxx.yyy : if . exists, xxx or yyy must at least exist 1 that is xxx., .yyy, xxx.yyy is ok, but . is not valid
 	// .yyy
-	if *pos < len(s) && s[*pos] == '.' {
-		*pos++
-		return readDigits(s, pos, true)
+	if v.peek() == '.' {
+		v.next()
+		return v.readDigits()
 	}
 
 	// xxx.yyy and xxx.
-	if ok := readDigits(s, pos, false); !ok {
+	if ok := v.readDigits(); !ok {
 		return false
 	}
 
-	if *pos < len(s) && s[*pos] == '.' {
-		*pos++
-		readOptionalDigits(s, pos)
+	if v.peek() == '.' {
+		v.next()
+		v.readOptionalDigits()
 	}
 
 	return true
 }
 
-func readDigits(s string, pos *int, isDecimalPart bool) bool {
-	if *pos >= len(s) {
+func (v *NumberValidator) readDigits() bool {
+	if !v.hasMore() {
 		return false
 	}
 
-	if !(s[*pos] >= '0' && s[*pos] <= '9') {
+	if !(v.peek() >= '0' && v.peek() <= '9') {
 		return false
 	}
-	*pos++
+	v.next()
 
-	for *pos < len(s) && s[*pos] >= '0' && s[*pos] <= '9' {
-		*pos++
-	}
+	v.readOptionalDigits()
 	return true
 }
 
-func readOptionalDigits(s string, pos *int) {
-	for *pos < len(s) && s[*pos] >= '0' && s[*pos] <= '9' {
-		*pos++
+func (v *NumberValidator) readOptionalDigits() {
+	for v.peek() >= '0' && v.peek() <= '9' {
+		v.next()
 	}
 }
 
-func readOptionalExponent(s string, pos *int) bool {
-	if *pos >= len(s) {
+func (v *NumberValidator) readOptionalExponent() bool {
+	if !v.hasMore() {
 		return true
 	}
 
-	if s[*pos] != 'e' {
+	if v.peek() != 'e' {
 		return true
 	}
 	// read 'e'
-	*pos++
+	v.next()
 
-	readOptionalSign(s, pos)
-	return readDigits(s, pos, false)
+	v.readOptionalSign()
+	return v.readDigits()
+}
+
+func (v *NumberValidator) isEmpty() bool {
+	return len(v.s) == 0
+}
+
+func (v *NumberValidator) hasMore() bool {
+	return v.pos < len(v.s)
+}
+
+func (v *NumberValidator) isValidFinalState() bool {
+	return v.pos == len(v.s)
+}
+
+func (v *NumberValidator) peek() uint8 {
+	if !v.hasMore() {
+		return 0
+	}
+
+	return v.s[v.pos]
+}
+
+func (v *NumberValidator) next() {
+	v.pos++
 }
