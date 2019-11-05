@@ -5,50 +5,53 @@ import (
 )
 
 // 2019/11/06 0:47 by fzls
+
+func fullJustify(words []string, maxWidth int) []string {
+	lineOfWords := getLineOfWords(words, maxWidth)
+	return formatLines(lineOfWords, words, maxWidth)
+}
+
 type LineOfWords struct {
 	Begin                int
 	End                  int
 	LenOfWordsWithASpace int
 }
 
-func fullJustify(words []string, maxWidth int) []string {
-	n := len(words)
-
+func getLineOfWords(words []string, maxWidth int) []*LineOfWords {
 	// find each line's start word and end word' idx
-	var lineOfWords []LineOfWords
+	var lineOfWords []*LineOfWords
 	start := 0
-	for start < n {
+	for start < len(words) {
 		end := start
 		currentLen := len(words[end])
-		for end+1 < n {
-			// len after add next word and a space
-			if currentLen+len(words[end+1])+1 > maxWidth {
-				break
-			}
-
+		for end+1 < len(words) && currentLen+len(words[end+1])+1 <= maxWidth {
 			currentLen += len(words[end+1]) + 1
 			end++
 		}
 
-		lineOfWords = append(lineOfWords, LineOfWords{
+		lineOfWords = append(lineOfWords, &LineOfWords{
 			Begin:                start,
 			End:                  end,
 			LenOfWordsWithASpace: currentLen,
 		})
+
 		start = end + 1
 	}
-	//fmt.Println(lineOfWords)
 
+	return lineOfWords
+}
+
+func formatLines(lineOfWords []*LineOfWords, words []string, maxWidth int) []string {
 	// format as requirements
-	nLine := len(lineOfWords)
 	var res []string
 	// print line except last line
-	for i := 0; i <= nLine-2; i++ {
+	for i := 0; i <= len(lineOfWords)-2; i++ {
 		line := lineOfWords[i]
 		remainingSpace := maxWidth - line.LenOfWordsWithASpace
 		gap := line.End - line.Begin
 
 		if gap == 0 {
+			// single word line
 			var sb strings.Builder
 			sb.WriteString(words[line.Begin])
 			nLeft := maxWidth - sb.Len()
@@ -77,8 +80,9 @@ func fullJustify(words []string, maxWidth int) []string {
 		}
 		res = append(res, sb.String())
 	}
+
 	// print last line
-	line := lineOfWords[nLine-1]
+	line := lineOfWords[len(lineOfWords)-1]
 	var sb strings.Builder
 	sb.WriteString(words[line.Begin])
 	for j := line.Begin + 1; j <= line.End; j++ {
