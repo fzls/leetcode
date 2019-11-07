@@ -5,38 +5,36 @@ func setZeroes(matrix [][]int) {
 	m := len(matrix)
 	n := len(matrix[0])
 
-	zeroRows := make([]bool, m)
-	zeroCols := make([]bool, n)
-
-	// find row and col that should zero out
+	isFirstColumnHasZero := false
 	for row := 0; row < m; row++ {
-		for col := 0; col < n; col++ {
+		if matrix[row][0] == 0 {
+			isFirstColumnHasZero = true
+		}
+
+		for col := 1; col < n; col++ {
 			if matrix[row][col] == 0 {
-				zeroRows[row] = true
-				zeroCols[col] = true
+				matrix[row][0] = 0
+				matrix[0][col] = 0
 			}
 		}
 	}
 
-	// zero rows
-	for row := 0; row < m; row++ {
-		if !zeroRows[row] {
-			continue
-		}
-
-		for col := 0; col < n; col++ {
-			matrix[row][col] = 0
+	for row := 1; row < m; row++ {
+		for col := 1; col < n; col++ {
+			if matrix[row][0] == 0 || matrix[0][col] == 0 {
+				matrix[row][col] = 0
+			}
 		}
 	}
 
-	// zero cols
-	for col := 0; col < n; col++ {
-		if !zeroCols[col] {
-			continue
+	if matrix[0][0] == 0 {
+		for col := 1; col < n; col++ {
+			matrix[0][col] = 0
 		}
-
+	}
+	if isFirstColumnHasZero {
 		for row := 0; row < m; row++ {
-			matrix[row][col] = 0
+			matrix[row][0] = 0
 		}
 	}
 
