@@ -12,14 +12,17 @@ func minDistance(word1 string, word2 string) int {
 		dp[j] = n - j
 	}
 
+	// to save space, wo use only one row, but we need to save dp[i+1][j+1] into nextLineNextRowValue before we try to change dp[i+1][j+1]
+	// word1[i] == word2[j] => dp[i][j] = d[i+1][j+1]
+	// word1[i] != word2[j] => dp[i][j] = 1 + min( dp[i][j+1], dp[i+1][j], dp[i+1][j+1] )
 	for i := m - 1; i >= 0; i-- {
-		lastValue := dp[n] // dp[i+1][j+1]
+		nextLineNextRowValue := dp[n] // dp[i+1][j+1]
 		dp[n]++
 
 		for j := n - 1; j >= 0; j-- {
 			temp := dp[j]
 			if word1[i] == word2[j] {
-				dp[j] = lastValue
+				dp[j] = nextLineNextRowValue
 			} else {
 				// insert
 				min := dp[j+1]
@@ -28,14 +31,14 @@ func minDistance(word1 string, word2 string) int {
 					min = dp[j]
 				}
 				// replace
-				if lastValue < min {
-					min = lastValue
+				if nextLineNextRowValue < min {
+					min = nextLineNextRowValue
 				}
 
 				// op+1
 				dp[j] = 1 + min
 			}
-			lastValue = temp
+			nextLineNextRowValue = temp
 		}
 	}
 
