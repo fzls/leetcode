@@ -5,42 +5,42 @@ func minDistance(word1 string, word2 string) int {
 	m, n := len(word1), len(word2)
 
 	// alloc
-	dp := make([]int, n+1)
-
-	// init
-	for j := 0; j <= n; j++ {
-		dp[j] = n - j
+	dp := make([][]int, m+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]int, n+1)
 	}
 
-	// to save space, wo use only one row, but we need to save dp[i+1][j+1] into nextLineNextRowValue before we try to change dp[i+1][j+1]
+	// init
+	for i := 0; i <= m; i++ {
+		dp[i][n] = m - i
+	}
+	for j := 0; j <= n; j++ {
+		dp[m][j] = n - j
+	}
+
 	// word1[i] == word2[j] => dp[i][j] = d[i+1][j+1]
 	// word1[i] != word2[j] => dp[i][j] = 1 + min( dp[i][j+1], dp[i+1][j], dp[i+1][j+1] )
 	for i := m - 1; i >= 0; i-- {
-		nextLineNextRowValue := dp[n] // dp[i+1][j+1]
-		dp[n]++
-
 		for j := n - 1; j >= 0; j-- {
-			temp := dp[j]
 			if word1[i] == word2[j] {
-				dp[j] = nextLineNextRowValue
+				dp[i][j] = dp[i+1][j+1]
 			} else {
 				// insert
-				min := dp[j+1]
+				min := dp[i][j+1]
 				// delete
-				if dp[j] < min {
-					min = dp[j]
+				if dp[i+1][j] < min {
+					min = dp[i+1][j]
 				}
 				// replace
-				if nextLineNextRowValue < min {
-					min = nextLineNextRowValue
+				if dp[i+1][j+1] < min {
+					min = dp[i+1][j+1]
 				}
 
 				// op+1
-				dp[j] = 1 + min
+				dp[i][j] = 1 + min
 			}
-			nextLineNextRowValue = temp
 		}
 	}
 
-	return dp[0]
+	return dp[0][0]
 }
