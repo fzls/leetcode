@@ -22,6 +22,10 @@ func Test_minDistance(t *testing.T) {
 			word1 string
 			word2 string
 		}{word1: "intention", word2: "execution"}, want: 5},
+		{name: "test", args: struct {
+			word1 string
+			word2 string
+		}{word1: "kitten", word2: "sitting"}, want: 3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
