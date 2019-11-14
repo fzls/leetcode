@@ -46,9 +46,19 @@ func minWindow(s string, t string) string {
 		char := elem.Value.(*WindowItem).Char
 		charElems[char] = charElems[char][1:]
 	}
+	// 参考题解先过滤一遍
+	var filterItems []WindowItem
 	for pos, c := range s {
 		char := byte(c)
-		windowChanged := false
+		if _, ok := todos[char]; ok {
+			filterItems = append(filterItems, WindowItem{
+				Char: char,
+				Pos:  pos,
+			})
+		}
+	}
+	for _, item := range filterItems {
+		pos, char := item.Pos, item.Char
 		if _, ok := todos[char]; ok {
 			// 如果在未匹配的T的字符集中有这个字符，则加入当前的匹配窗口列表中
 			todos[char]--
@@ -56,16 +66,14 @@ func minWindow(s string, t string) string {
 				delete(todos, char)
 			}
 			addToWindow(pos, char)
-			windowChanged = true
-		} else if elems := charElems[char]; len(elems) != 0 {
-			// 否则看看是否这个字符在当前的匹配窗口列表中，若在，则将其从列表中移出一个，然后把这个放到队尾，从而使子串尽可能短
-			popFromWindow(elems[0])
+		} else {
+			// 否则则将其从列表中移出一个，然后把这个放到队尾，从而使子串尽可能短
+			popFromWindow(charElems[char][0])
 			addToWindow(pos, char)
-			windowChanged = true
 		}
 
 		// 看看当前的窗口是否是一个符合要求的窗口
-		if len(todos) == 0 && windowChanged {
+		if len(todos) == 0 {
 			// 更新最小窗口
 			newMindow := &Window{
 				Begin: window.Front().Value.(*WindowItem).Pos,
