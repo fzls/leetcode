@@ -6,6 +6,7 @@ import (
 
 // 2019/11/21 22:12 by fzls
 func largestRectangleArea(heights []int) int {
+	return _largestRectangleArea(heights)
 	if len(heights) == 0 {
 		return 0
 	}
@@ -63,4 +64,29 @@ func bSearch(regions [][]int, idx int) int {
 	}
 
 	return -1
+}
+
+// 单调栈
+func _largestRectangleArea(heights []int) int {
+	maxArea := 0
+	stack := []int{-1}
+	for idx, height := range heights {
+		for stack[len(stack)-1] != -1 && heights[stack[len(stack)-1]] >= height {
+			area := heights[stack[len(stack)-1]] * (idx - stack[len(stack)-2] - 1)
+			if area > maxArea {
+				maxArea = area
+			}
+			stack = stack[:len(stack)-1]
+		}
+
+		stack = append(stack, idx)
+	}
+	for stack[len(stack)-1] != -1 {
+		area := heights[stack[len(stack)-1]] * (len(heights) - stack[len(stack)-2] - 1)
+		if area > maxArea {
+			maxArea = area
+		}
+		stack = stack[:len(stack)-1]
+	}
+	return maxArea
 }
