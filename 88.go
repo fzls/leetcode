@@ -5,6 +5,7 @@ func merge(nums1 []int, m int, nums2 []int, n int) {
 		return
 	}
 
+	// 测试一下push
 	idx := m + n - 1
 	i := m - 1
 	j := n - 1
